@@ -3052,13 +3052,18 @@ def establish_user_defined_connection(dbname, args, clusters):
         return None
 
     port = args['port']
-    host = args['host']
+    host = args.get('host', None)
     user = args.get('user', 'postgres')
     # the db is the actual database we connect to, while dbname is the name of the postgres cluster
     db = args.get('dbname', 'postgres')
+    if host:
+        dsn = 'host={0} port={1} user={2} dbname={3}'.format(host, port, user, db)
+    else:
+        dsn = 'port={1} user={2} dbname={3}'.format(host, port, user, db)
+
     # establish a new connection
     try:
-        pgcon = psycopg2.connect('host={0} port={1} user={2} dbname={3}'.format(host, port, user, db))
+        pgcon = psycopg2.connect(dsn)
     except Exception, e:
         logger.error('failed to establish connection to {0} on port {1} user {2} database {3}'.format(host, port, user,
                      dbname))
