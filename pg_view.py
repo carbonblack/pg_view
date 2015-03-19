@@ -804,7 +804,7 @@ class StatCollector(object):
         for r in rows:
             data.append(self._produce_output_row(r))
             output['data'] = data
-        return json.dumps(output, indent=4)
+        return json.dumps(output)
 
     def ncurses_filter_row(self, row):
         return False
